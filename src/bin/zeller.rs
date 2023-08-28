@@ -16,13 +16,51 @@
 // Y+[Y/4]+Γ: 年の計算
 // +5, +1 ISO 8601に準拠するための調整
 
+enum DayOfWeek {
+    Sunday,    // 日曜日
+    Monday,    // 月曜日
+    Tuesday,   // 火曜日
+    Wednesday, // 水曜日
+    Thursday,  // 木曜日
+    Friday,    // 金曜日
+    Saturday,  // 土曜日
+}
+
+impl DayOfWeek {
+    fn from_iso_number(iso_number: i32) -> DayOfWeek {
+        match iso_number {
+            1 => DayOfWeek::Monday,
+            2 => DayOfWeek::Tuesday,
+            3 => DayOfWeek::Wednesday,
+            4 => DayOfWeek::Thursday,
+            5 => DayOfWeek::Friday,
+            6 => DayOfWeek::Saturday,
+            7 => DayOfWeek::Sunday,
+            _ => unreachable!(),
+        }
+    }
+
+    fn to_ja(&self) -> char {
+        match self {
+            DayOfWeek::Monday => '月',
+            DayOfWeek::Tuesday => '火',
+            DayOfWeek::Wednesday => '水',
+            DayOfWeek::Thursday => '木',
+            DayOfWeek::Friday => '金',
+            DayOfWeek::Saturday => '土',
+            DayOfWeek::Sunday => '日',
+        }
+    }
+}
 fn main() {
     let year = 2023;
     let month = 8;
     let day = 4;
 
     let zeller_iso = zeller(year, month, day);
-    println!("{:04}-{:02}-{:02} ({})", year, month, day, zeller_iso);
+    let day_of_week = DayOfWeek::from_iso_number(zeller_iso);
+    let day_of_week_ja = day_of_week.to_ja();
+    println!("{:04}-{:02}-{:02} ({})", year, month, day, day_of_week_ja);
 }
 
 fn zeller(y: i32, m: i32, d: i32) -> i32 {
